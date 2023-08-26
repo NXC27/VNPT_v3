@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.vnpt_v3.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/username"
+        android:title="Hello User"
+        app:showAsAction="always" >
+        <menu>
+            <item
+                android:id="@+id/menu_change_password"
+                android:title="Doi Mat Khau"/>
+            <item
+                android:id="@+id/menu_log_out"
+                android:title="Dang Xuat"/>
+        </menu>
+    </item>
 </menu>

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.example.vnpt_v3.DataBaseHandler.ICallAPI;
 import com.example.vnpt_v3.DataBaseHandler.ICallBack;
@@ -42,6 +43,17 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
                 {
                     processLogin(name,pwd);
                 }
+            }
+        });
+
+        TextView signup = (TextView) findViewById(R.id.signup);
+
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),FirstFragment.class);
+                // Sua FirstFragment.class thanh SignupActivity
+                startActivity(intent);
             }
         });
     }
