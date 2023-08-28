@@ -3,6 +3,7 @@ package com.example.vnpt_v3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import com.example.vnpt_v3.DataBaseHandler.RetrofitClient;
 
 import org.json.JSONObject;
 
+import java.util.logging.Logger;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.test_login);
 
         EditText edname = (EditText) findViewById(R.id.editUserName);
         EditText edpassword = (EditText) findViewById(R.id.editPassword);
@@ -46,16 +49,16 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
             }
         });
 
-        TextView signup = (TextView) findViewById(R.id.signup);
+//        TextView signup = (TextView) findViewById(R.id.signup);
 
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),FirstFragment.class);
-                // Sua FirstFragment.class thanh SignupActivity
-                startActivity(intent);
-            }
-        });
+//        signup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(),FirstFragment.class);
+//                // Sua FirstFragment.class thanh SignupActivity
+//                startActivity(intent);
+//            }
+//        });
     }
 
     private void processLogin(String name, String pwd) {
@@ -65,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 if (response.isSuccessful()){
-                    MainActivity.this.onResponse(response.body());
+//                    JSONObject jsonObject = response.body();
+                    Log.e("Data",response.toString());
                 }
             }
 
@@ -79,11 +83,13 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
     @Override
     public void onResponse(JSONObject jsonObject)
     {
-        System.out.println(jsonObject);
+        Log.e("Data",jsonObject.toString());
+//        System.out.println(jsonObject);
     }
 
     @Override
     public void onError(Throwable t) {
-        System.out.println(t.getLocalizedMessage());
+        Log.getStackTraceString(t);
+//        System.out.println(t.getLocalizedMessage());
     }
 }
