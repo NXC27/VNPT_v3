@@ -7,9 +7,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static String url = "https://vnpt-web-api.000webhostapp.com"; //Dia chi url call api
+//    private static String url = "https://vnpt-web-api.000webhostapp.com/"; //Dia chi url call api
+    private static String url = "http://10.130.188.195/API/"; //Dia chi url call api
     private static Retrofit retrofitClient;
-    private static final Gson gson = new GsonBuilder().setLenient().create();
+//    private static final Gson gson = new GsonBuilder().setLenient().create();
 
     public static Retrofit getInstance()
     {
@@ -17,11 +18,12 @@ public class RetrofitClient {
         {
             retrofitClient = new Retrofit.Builder()
                     .baseUrl(url)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofitClient;
     }
+
 
     public static void setUrl(String url) {
         RetrofitClient.url = url;
