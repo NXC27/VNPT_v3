@@ -1,20 +1,9 @@
 package com.example.vnpt_v3.Model;
 
-import org.json.JSONObject;
+//import org.json.JSONObject;
 
 public class ResObject {
-    private JSONObject jsonObject;
+   private String email;
+   private String password;
 
-    public ResObject (JSONObject jsonObject)
-    {
-        this.jsonObject = jsonObject;
-    }
-
-    public JSONObject getJsonObject() {
-        return jsonObject;
-    }
-
-    public void setJsonObject(JSONObject jsonObject) {
-        this.jsonObject = jsonObject;
-    }
 }

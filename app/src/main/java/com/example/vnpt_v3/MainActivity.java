@@ -11,8 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.vnpt_v3.DataBaseHandler.ICallAPI;
 import com.example.vnpt_v3.DataBaseHandler.ICallBack;
+import com.example.vnpt_v3.DataBaseHandler.MySQLDB;
 import com.example.vnpt_v3.DataBaseHandler.RetrofitClient;
 
 import org.json.JSONObject;
@@ -21,9 +27,8 @@ import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements ICallBack {
+public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
             public void onClick(View view) {
                 String name = edname.getText().toString().toLowerCase();
                 String pwd = edpassword.getText().toString();
-                if (name == "" || pwd == ""){
-                    Toast.makeText(MainActivity.this,"Email and Password must be fill",Toast.LENGTH_SHORT);
+                if (name.length() == 0 || pwd.length() == 0){
+                    Toast t = Toast.makeText(getBaseContext(),"Email and Password must be fill",Toast.LENGTH_SHORT);
+                    t.show();
                 }else
                 {
                     processLogin(name,pwd);
@@ -62,34 +68,19 @@ public class MainActivity extends AppCompatActivity implements ICallBack {
     }
 
     private void processLogin(String name, String pwd) {
-        ICallAPI loginService = RetrofitClient.getInstance().create(ICallAPI.class);
-        Call<JSONObject> call = loginService.Login(name,pwd);
-        call.enqueue(new Callback<JSONObject>() {
-            @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                if (response.isSuccessful()){
-//                    JSONObject jsonObject = response.body();
-                    Log.e("Data",response.toString());
-                }
-            }
+        StringRequest stringRequest = new StringRequest(1, "http://192.168.1.104/login.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Response", response);
+                    }
 
+                }, new Response.ErrorListener() {
             @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
-                MainActivity.this.onError(t);
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Response Error",error.toString());
             }
         });
-    }
-
-    @Override
-    public void onResponse(JSONObject jsonObject)
-    {
-        Log.e("Data",jsonObject.toString());
-//        System.out.println(jsonObject);
-    }
-
-    @Override
-    public void onError(Throwable t) {
-        Log.getStackTraceString(t);
-//        System.out.println(t.getLocalizedMessage());
+        MySQLDB.getInstance(getBaseContext()).addToRequestQueue(stringRequest);
     }
 }
