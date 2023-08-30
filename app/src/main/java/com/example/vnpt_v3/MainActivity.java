@@ -68,10 +68,11 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void processLogin(String name, String pwd) {
-        StringRequest stringRequest = new StringRequest(1, "http://192.168.1.104/login.php",
+        StringRequest stringRequest = new StringRequest(1, "http://192.168.137.1/API/login.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
                         Log.d("Response", response);
                     }
 
