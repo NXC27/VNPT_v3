@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    android:stretchColumns="1,2,3">
+    android:stretchColumns="0,1"
+    tools:context=".LichSuNguoiDung">
 
     <LinearLayout
         android:gravity="center"
@@ -34,15 +36,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:padding="10dp"
-            android:layout_column="1"/>
-
-        <TextView
-            android:text="Ngay Vao"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:padding="10dp"
-            android:layout_column="2"/>
+            android:layout_column="0"/>
 
         <TextView
             android:text="Thoi Gian Vao"
@@ -50,7 +44,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:padding="10dp"
-            android:layout_column="3"/>
+            android:layout_column="1"/>
     </TableRow>
 
     <androidx.recyclerview.widget.RecyclerView
