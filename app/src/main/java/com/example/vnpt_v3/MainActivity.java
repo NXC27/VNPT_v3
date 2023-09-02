@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity{
                 }else
                 {
                     processLogin(name,pwd);
-                    startActivity(new Intent(MainActivity.this, LichSuNguoiDung.class));
                 }
             }
         });
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void processLogin(String name, String pwd) {
-        StringRequest stringRequest = new StringRequest(1, "http://192.168.0.34/Web/nd.php",
+        StringRequest stringRequest = new StringRequest(1, "http://192.168.1.104/login.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
