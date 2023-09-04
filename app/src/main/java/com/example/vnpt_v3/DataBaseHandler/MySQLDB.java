@@ -1,15 +1,31 @@
 package com.example.vnpt_v3.DataBaseHandler;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class MySQLDB {
+
+    private String url = "http://192.168.1.146/API/";
     private static MySQLDB instance;
     private RequestQueue requestQueue;
     private static Context ctx;
+
+    private static JsonObjectRequest jsonObjectRequest;
 
     private MySQLDB(Context context) {
         ctx = context;
@@ -37,7 +53,77 @@ public class MySQLDB {
     }
 
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
+    public <T,V> void RequestCall(String url_path, @Nullable HashMap<T,V> params,
+                                  boolean Method_PnG, final ICallBack callBack)
+    {
+        if (Method_PnG)
+        {
+            //                        Log.d("Response Volley",response.toString());
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                    url + url_path,
+                    new JSONObject(params),
+                    (Response.Listener<JSONObject>) jsonObject -> callBack.onResponse(jsonObject),
+                    (Response.ErrorListener) callBack::onError
+            );
+        }
+        else
+        {
+            jsonObjectRequest = new JsonObjectRequest(
+                    url + url_path,
+                    (Response.Listener<JSONObject>) response -> callBack.onResponse(response),
+                    (Response.ErrorListener) error -> callBack.onError(error)
+            );
+        }
+        Log.d("URL",url+url_path);
+        getRequestQueue().add(jsonObjectRequest);
+    }
+
+    public void RequestCall1(String url_path, @Nullable HashMap<String,String> params,
+                                  boolean Method_PnG, final ICallBack callBack)
+    {
+        StringRequest stringRequest;
+        if (Method_PnG)
+        {
+            stringRequest = new StringRequest(1,
+                    url + url_path,
+                    response -> {
+                        try {
+                            callBack.onResponse(new JSONObject(response));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    },
+                    error -> callBack.onError(error)
+            ){
+                @androidx.annotation.Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    return  params;
+                }
+            };
+
+        }
+        else
+        {
+            stringRequest = new StringRequest(
+                    url + url_path,
+                    response -> {
+                        try {
+                            callBack.onResponse(new JSONObject(response));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    },
+                    error -> callBack.onError(error)
+            );
+        }
+        Log.d("URL",url+url_path);
+        getRequestQueue().add(stringRequest);
+    }
 }
 
 // Get a RequestQueue
