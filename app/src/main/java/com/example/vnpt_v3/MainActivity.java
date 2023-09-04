@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_login);
+        setContentView(R.layout.activity_main);
 
         EditText edname = (EditText) findViewById(R.id.editUserName);
         EditText edpassword = (EditText) findViewById(R.id.editPassword);
@@ -58,16 +58,16 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-//        TextView signup = (TextView) findViewById(R.id.signup);
+        TextView signup = (TextView) findViewById(R.id.signup);
 
-//        signup.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(),FirstFragment.class);
-//                // Sua FirstFragment.class thanh SignupActivity
-//                startActivity(intent);
-//            }
-//        });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),SignUp.class);
+                // Sua FirstFragment.class thanh SignupActivity
+                startActivity(intent);
+            }
+        });
     }
 
     private void processLogin(String name, String pwd) {
