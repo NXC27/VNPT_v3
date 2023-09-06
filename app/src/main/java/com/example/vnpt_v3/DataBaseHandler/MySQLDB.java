@@ -71,10 +71,6 @@ public class MySQLDB {
                     (Response.Listener<JSONObject>) jsonObject -> callBack.onResponse(jsonObject),
                     (Response.ErrorListener) callBack::onError
             );
-           jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    20000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
         else
         {
@@ -83,11 +79,11 @@ public class MySQLDB {
                     (Response.Listener<JSONObject>) response -> callBack.onResponse(response),
                     (Response.ErrorListener) error -> callBack.onError(error)
             );
-            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    20000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Log.d("URL",url+url_path);
         getRequestQueue().add(jsonObjectRequest);
     }

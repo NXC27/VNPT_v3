@@ -21,7 +21,9 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.vnpt_v3.DataBaseHandler.ICallAPI;
 import com.example.vnpt_v3.DataBaseHandler.ICallBack;
 import com.example.vnpt_v3.DataBaseHandler.MySQLDB;
@@ -49,98 +51,95 @@ public class LichSuNguoiDung extends AppCompatActivity{
         recyclerView = findViewById(R.id.recycle_view);
 
         Intent intent = getIntent();
-        String get_name = intent.getStringExtra("NAME");
-        String get_pwd = intent.getStringExtra("PASS");
+        String id = intent.getStringExtra("ID");
         Boolean get_ckBox = intent.getBooleanExtra("CKBOX", false);
         String url;
+        loadData();
 
+        name = new ArrayList<>();
+//        name.add("Nguyen Xuan Chu");
+//        name.add("Nguyen Xuan Minh Nhat");
+//        name.add("Phan Tuan");
 
+        date = new ArrayList<>();
+//        date.add("27/10/2001");
+//        date.add("27/11/2001");
+//        date.add("27/12/2001");
 
-
-
-
-        ArrayList<String> name = new ArrayList<>();
-        name.add("Nguyen Xuan Chu");
-        name.add("Nguyen Xuan Minh Nhat");
-        name.add("Phan Tuan");
-
-        ArrayList<String> date = new ArrayList<>();
-        date.add("27/10/2001");
-        date.add("27/11/2001");
-        date.add("27/12/2001");
-
-        ArrayList<String> time = new ArrayList<>();
-        time.add("12:00");
-        time.add("22:10");
-        time.add("23:41");
+        time = new ArrayList<>();
+//        time.add("12:00");
+//        time.add("22:10");
+//        time.add("23:41");
 
         adapterUser = new AdapterUser(LichSuNguoiDung.this, name, date, time);
         recyclerView.setAdapter(adapterUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+        TextView settings = (TextView) findViewById(R.id.setting);
+        settings.setOnClickListener(new View.OnClickListener() {
+//            Intent intent = getIntent();
+//            final String get_id = intent.getStringExtra("ID");
+//            final Boolean get_ckBox = intent.getBooleanExtra("CKBOX", false);
+//            String url;
 
-    TextView settings = (TextView) findViewById(R.id.setting);
-    settings.setOnClickListener(new View.OnClickListener() {
-        Intent intent = getIntent();
-        final String get_id = intent.getStringExtra("ID");
-        final Boolean get_ckBox = intent.getBooleanExtra("CKBOX", false);
-        String url;
-
-        @Override
-        public void onClick(View v) {
-            PopupMenu popupMenu = new PopupMenu(LichSuNguoiDung.this, settings);
-            popupMenu.getMenuInflater().inflate(R.menu.menu_main, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getItemId() == R.id.menu_change_password){
-                        Toast.makeText(LichSuNguoiDung.this, "changed password", Toast.LENGTH_SHORT).show();
-                        if (get_ckBox){
-                            url = "lich_su_nhanvien.php";
-                        }else{
-                            url = "lich_su_khach.php";
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(LichSuNguoiDung.this, settings);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_main, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.menu_change_password){
+                            Toast.makeText(LichSuNguoiDung.this, "changed password", Toast.LENGTH_SHORT).show();
+                        } else if (item.getItemId() == R.id.menu_log_out) {
+                            Toast.makeText(LichSuNguoiDung.this, "logged out", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                            finishAffinity();
+                            startActivity(intent);
                         }
-                        HashMap<String, String> param = new HashMap<>();
-                        param.put("ID", get_id);
-
-                        Log.d("param1", param.get("ID"));
-
-                        MySQLDB.getInstance(LichSuNguoiDung.this).RequestCall(url, param,
-                                true, new ICallBack() {
-                                    @Override
-                                    public void onResponse(JSONObject jsonObject) {
-                                        try {
-                                            Log.d("response",jsonObject.getString("response"));
-//
-                                            JSONArray dataArray = jsonObject.getJSONArray("data");
-                                            JSONObject dataObject = dataArray.getJSONObject(0);
-                                            String name = dataObject.getString("NAME");
-                                            Log.d("DataRes", name);
-
-                                            Toast.makeText(LichSuNguoiDung.this,"Success",Toast.LENGTH_SHORT).show();
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable t) {
-                                        Log.e("Error", t.toString());
-                                    }
-                                });
-                    } else if (item.getItemId() == R.id.menu_log_out) {
-                        Toast.makeText(LichSuNguoiDung.this, "logged out", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                        finishAffinity();
-                        startActivity(intent);
+                        return false;
                     }
-                    return false;
+                });
+                popupMenu.show();
+            }
+        });
+    }
+
+    private void loadData() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("ID",getIntent().getStringExtra("ID"));
+        String url_path = getIntent().getBooleanExtra("CKBOX",false) ? "lich_su_nhanvien.php" : "lich_su_khach.php";
+        MySQLDB.getInstance(LichSuNguoiDung.this).RequestCall(
+                url_path, params, true,
+                new ICallBack() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        try {
+                            if (jsonObject.getString("response").equals("success"))
+                            {
+                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for (int i = 0 ; i < jsonArray.length()-1 ; i++){
+                                    JSONObject data = jsonArray.getJSONObject(i);
+                                    name.add(data.get("NAME").toString());
+                                    date.add(data.get("DATE_TIME").toString().substring(0,9));
+                                    time.add(data.get("DATE_TIME").toString().substring(10));
+//                                    name.add(data.get("").toString());
+                                }
+                            }
+
+                        }catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        throw new RuntimeException(t);
+//                        Log.e("Error",t.toString());
+                    }
                 }
-            });
-            popupMenu.show();
-        }
-    });
+        );
     }
 
 
