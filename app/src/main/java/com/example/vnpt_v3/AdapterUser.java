@@ -16,12 +16,13 @@ import java.util.ArrayList;
 
 public class AdapterUser extends RecyclerView.Adapter<AdapterUser.Myviewholder> {
     private Context context;
-    private ArrayList name_id, datetime_id;
+    private ArrayList name_id, date_id, time_id;
 
-    public AdapterUser(Context context, ArrayList name_id, ArrayList datetime_id) {
+    public AdapterUser(Context context, ArrayList name_id, ArrayList date_id, ArrayList time_id) {
         this.context = context;
         this.name_id = name_id;
-        this.datetime_id = datetime_id;
+        this.date_id = date_id;
+        this.time_id = time_id;
     }
 
     @NonNull
@@ -34,7 +35,8 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.Myviewholder> 
     @Override
     public void onBindViewHolder(@NonNull Myviewholder holder, int position) {
         holder.name_id.setText(String.valueOf(name_id.get(position)));
-        holder.datetime_id.setText(String.valueOf(datetime_id.get(position)));
+        holder.date_id.setText(String.valueOf(date_id.get(position)));
+        holder.time_id.setText(String.valueOf(time_id.get(position)));
     }
 
     @Override
@@ -44,11 +46,13 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.Myviewholder> 
 
     public class Myviewholder extends RecyclerView.ViewHolder {
         TextView name_id;
-        TextView datetime_id;
+        TextView date_id;
+        TextView time_id;
         public Myviewholder(@NonNull View itemView) {
             super(itemView);
             name_id = itemView.findViewById(R.id.txtName);
-            datetime_id = itemView.findViewById(R.id.txtDatetime);
+            date_id = itemView.findViewById(R.id.txtDate);
+            time_id = itemView.findViewById(R.id.txtTime);
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,7 +21,8 @@ import java.util.Map;
 
 public class MySQLDB {
 
-    private String url = "http://192.168.1.146/API/";
+
+    private String url = "http://10.128.101.129/Web/android/";
     private static MySQLDB instance;
     private RequestQueue requestQueue;
     private static Context ctx;
@@ -69,6 +71,10 @@ public class MySQLDB {
                     (Response.Listener<JSONObject>) jsonObject -> callBack.onResponse(jsonObject),
                     (Response.ErrorListener) callBack::onError
             );
+           jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    20000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
         else
         {
@@ -77,6 +83,10 @@ public class MySQLDB {
                     (Response.Listener<JSONObject>) response -> callBack.onResponse(response),
                     (Response.ErrorListener) error -> callBack.onError(error)
             );
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    20000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
         Log.d("URL",url+url_path);
         getRequestQueue().add(jsonObjectRequest);
@@ -91,6 +101,7 @@ public class MySQLDB {
             stringRequest = new StringRequest(1,
                     url + url_path,
                     response -> {
+                        Log.d("Responsea1",response);
                         try {
                             callBack.onResponse(new JSONObject(response));
                         } catch (JSONException e) {
@@ -122,6 +133,10 @@ public class MySQLDB {
             );
         }
         Log.d("URL",url+url_path);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         getRequestQueue().add(stringRequest);
     }
 }

@@ -1,18 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.vnpt_v3.MainActivity">
+    tools:context="com.example.vnpt_v3.XuLyMenu">
+<!--    <item-->
+<!--        android:id="@+id/username"-->
+<!--        android:title="Hello User"-->
+<!--        app:showAsAction="always" />-->
     <item
-        android:id="@+id/username"
-        android:title="Hello User"
-        app:showAsAction="always" >
-        <menu>
-            <item
-                android:id="@+id/menu_change_password"
-                android:title="Doi Mat Khau"/>
-            <item
-                android:id="@+id/menu_log_out"
-                android:title="Dang Xuat"/>
-        </menu>
-    </item>
+        android:id="@+id/menu_change_password"
+        android:title="Doi Mat Khau"/>
+    <item
+        android:id="@+id/menu_log_out"
+        android:title="Dang Xuat"/>
 </menu>

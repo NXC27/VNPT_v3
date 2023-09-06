@@ -87,7 +87,7 @@
         android:paddingTop="8dp">
 
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:paddingLeft="18dp"
             android:text="Ngay Gio Vao:"
@@ -105,7 +105,12 @@
             android:textAlignment="center"
             android:hint="Ngay Dang Ki"
             android:inputType="date"
-            android:singleLine="true" />
+            android:singleLine="true"
+
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false" />
 
     </LinearLayout>
 
@@ -129,7 +134,12 @@
             android:textAlignment="center"
             android:hint="Thoi Gian Vao"
             android:inputType="time"
-            android:singleLine="true" />
+            android:singleLine="true"
+
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,7 +156,12 @@
             android:textAlignment="center"
             android:hint="Thoi Gian Ra"
             android:inputType="time"
-            android:singleLine="true" />
+            android:singleLine="true"
+
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"/>
 
     </LinearLayout>
 
@@ -181,7 +196,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnSignup"
         android:layout_width="155dp"
         android:layout_height="74dp"
         android:layout_gravity="center"
@@ -191,6 +206,7 @@
         android:text="Dang Ki" />
 
     <TextView
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"

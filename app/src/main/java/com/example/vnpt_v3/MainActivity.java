@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,22 +39,60 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText edname = (EditText) findViewById(R.id.editUserName);
-        EditText edpassword = (EditText) findViewById(R.id.editPassword);
+        EditText editUserName = (EditText) findViewById(R.id.editUserName);
+        EditText editPassword = (EditText) findViewById(R.id.editPassword);
 
+        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
         Button btn_submit = (Button) findViewById(R.id.btnLogin);
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = edname.getText().toString().toLowerCase();
-                String pwd = edpassword.getText().toString();
+                String name = editUserName.getText().toString();
+                String pwd = editPassword.getText().toString();
+                String url;
+
+                if(checkBox.isChecked()){
+                    url = "login_nhanvien.php";
+                }else{
+                    url = "login_khach.php";
+                }
+
                 if (name.length() == 0 || pwd.length() == 0){
                     Toast t = Toast.makeText(getBaseContext(),"Email and Password must be fill",Toast.LENGTH_SHORT);
                     t.show();
                 }else
                 {
-                    processLogin(name,pwd);
+                    HashMap<String, String> param = new HashMap<>();
+                    param.put("NAME", name);
+                    param.put("PASS", pwd);
+
+                    MySQLDB.getInstance(MainActivity.this).RequestCall(url, param,
+                            true, new ICallBack() {
+                                @Override
+                                public void onResponse(JSONObject jsonObject) {
+                                    try {
+                                        Log.d("response",jsonObject.getString("response"));
+                                        Log.d("DataRes",jsonObject.getJSONArray("data").toString());
+                                        Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_SHORT).show();
+                                        String id = jsonObject.getJSONArray("data").get(0).toString();
+                                        if(jsonObject.getString("response").equals("Success")){
+                                            Intent intent = new Intent(getApplicationContext(),LichSuNguoiDung.class);
+                                            intent.putExtra("ID", id);
+                                            intent.putExtra("CKBOX", checkBox.isChecked());
+                                            finishAffinity();
+                                            startActivity(intent);
+                                        }
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable t) {
+                                    Log.e("Error", t.toString());
+                                }
+                            });
                 }
             }
         });
@@ -64,51 +103,11 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SignUp.class);
-                // Sua FirstFragment.class thanh SignupActivity
+                finishAffinity();
                 startActivity(intent);
             }
         });
+
     }
 
-    private void processLogin(String name, String pwd) {
-        String url = "http://192.168.1.146/API/";
-//        String url = "IP/login.php";
-        HashMap<String,String> params = new HashMap<>();
-        params.put("EMAIL","Nguyễn Xuân Chủ");
-        params.put("PASSWORD","123");
-        MySQLDB.getInstance(getBaseContext()).RequestCall("login.php", params, true, new ICallBack() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-
-                try {
-                    Log.d("response",jsonObject.getString("response"));
-                    Log.d("DataRes",jsonObject.getJSONArray("data").toString());
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                Log.e("Error Response",t.toString());
-            }
-        });
-//        StringRequest stringRequest = new StringRequest(1, "http://192.168.1.146/API/login.php",
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
-//                        Log.d("Response", response);
-//                    }
-//
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("Response Error",error.toString());
-//            }
-//        });
-//        Log.d("URL","http://192.168.1.146/API/login.php");
-//        MySQLDB.getInstance(getBaseContext()).addToRequestQueue(stringRequest);
-    }
 }
