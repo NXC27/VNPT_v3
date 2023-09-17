@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity{
                                 public void onResponse(JSONObject jsonObject) {
                                     try {
                                         Log.d("response",jsonObject.getString("response"));
+
                                         Log.d("DataRes",jsonObject.getJSONArray("data").toString());
                                         Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_SHORT).show();
                                         String id = jsonObject.getJSONArray("data").get(0).toString();

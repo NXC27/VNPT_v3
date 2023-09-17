@@ -22,7 +22,7 @@ import java.util.Map;
 public class MySQLDB {
 
 
-    private String url = "http://10.128.101.129/Web/android/";
+    private String url = "http://192.168.137.242/Web/android/";
     private static MySQLDB instance;
     private RequestQueue requestQueue;
     private static Context ctx;

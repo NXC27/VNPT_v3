@@ -54,7 +54,6 @@ public class LichSuNguoiDung extends AppCompatActivity{
         String id = intent.getStringExtra("ID");
         Boolean get_ckBox = intent.getBooleanExtra("CKBOX", false);
         String url;
-        loadData();
 
         name = new ArrayList<>();
 //        name.add("Nguyen Xuan Chu");
@@ -71,6 +70,7 @@ public class LichSuNguoiDung extends AppCompatActivity{
 //        time.add("22:10");
 //        time.add("23:41");
 
+        loadData();
         adapterUser = new AdapterUser(LichSuNguoiDung.this, name, date, time);
         recyclerView.setAdapter(adapterUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -116,18 +116,23 @@ public class LichSuNguoiDung extends AppCompatActivity{
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         try {
-                            if (jsonObject.getString("response").equals("success"))
+                            Log.d("DATAOBJ",jsonObject.toString());
+                            if (jsonObject.getString("response").equals("Success"))
                             {
                                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                for (int i = 0 ; i < jsonArray.length()-1 ; i++){
-                                    JSONObject data = jsonArray.getJSONObject(i);
+                                JSONObject data = new JSONObject();
+                                for (int i = 0 ; i < jsonArray.length() ; i++){
+                                    data = jsonArray.getJSONObject(i);
                                     name.add(data.get("NAME").toString());
-                                    date.add(data.get("DATE_TIME").toString().substring(0,9));
-                                    time.add(data.get("DATE_TIME").toString().substring(10));
+                                    date.add(data.get("DATE_TIME").toString().substring(0,10));
+                                    time.add(data.get("DATE_TIME").toString().substring(11));
 //                                    name.add(data.get("").toString());
+                                    Log.d("NAME",name.toString());
+                                    Log.d("DATE",date.toString());
+                                    Log.d("TIME",time.toString());
                                 }
                             }
-
+                            recyclerView.setAdapter(adapterUser);
                         }catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
